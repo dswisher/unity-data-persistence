@@ -12,6 +12,8 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    public Text HighScoreText;
+    public Button MainMenuButton;
     
     private bool m_Started = false;
     private int m_Points;
@@ -36,6 +38,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+	    SetHighScoreText();
     }
 
     private void Update()
@@ -72,5 +76,38 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        MainMenuButton.gameObject.SetActive(true);
+
+        if ((DataMangler.Instance != null) && (m_Points > DataMangler.Instance.HighScore))
+        {
+            DataMangler.Instance.HighScore = m_Points;
+            DataMangler.Instance.HighPlayerName = DataMangler.Instance.PlayerName;
+
+            SetHighScoreText();
+	    }
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+
+    private void SetHighScoreText()
+    { 
+        if (DataMangler.Instance == null)
+        {
+            return;
+	    }
+
+        if (!string.IsNullOrEmpty(DataMangler.Instance.HighPlayerName))
+        {
+            HighScoreText.text = $"Best Score : {DataMangler.Instance.HighPlayerName} : {DataMangler.Instance.HighScore}";
+	    }
+        else
+        {
+            // No high score, yet
+            HighScoreText.text = string.Empty;
+	    }
     }
 }
