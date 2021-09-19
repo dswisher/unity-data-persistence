@@ -87,6 +87,7 @@ public class MainManager : MonoBehaviour
 	    }
     }
 
+
     public void MainMenu()
     {
         SceneManager.LoadScene(0);
